@@ -7,8 +7,6 @@ import (
 )
 
 func execute() {
-	//install := false
-
 	flag.SetName("undo")
 	flag.SetDescription("undo commands")
 	flag.SetVersion("1.0.0")
@@ -27,7 +25,7 @@ func execute() {
 	} else if uninstall.Used {
 		util.Uninstall()
 	} else {
-		util.Warn("undo is on development")
+		util.Warn("undo is under development")
 		util.Warn("It cannot undo all commands")
 	}
 }
