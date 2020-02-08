@@ -1,6 +1,7 @@
 package util
 
 import (
+	"net/http"
 	"os"
 )
 
@@ -10,7 +11,13 @@ func Install() {
 	}
 
 	Log("checking your shell: %s", GetDefaultShell())
-	Log("installing undo")
+	Log("fetching command list")
+
+	res, err := http.Get(GetBaseUrl() + "/blob/master/commands.txt")
+	if err != nil {
+		Error(true, err.Error())
+	}
+	defer res.Body.Close()
 
 	ch := PrintProgress()
 

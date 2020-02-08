@@ -5,9 +5,17 @@ import (
 	"strings"
 )
 
+func GetBaseUrl() string {
+	return "https://github.com/buttercrab/undo"
+}
+
 func GetDefaultShell() string {
 	list := strings.Split(os.Getenv("SHELL"), "/")
 	return list[len(list)-1]
+}
+
+func GetGoPath() string {
+	return os.Getenv("GOPATH")
 }
 
 func GetHomePath() string {
@@ -16,10 +24,6 @@ func GetHomePath() string {
 
 func GetHistFile() string {
 	return os.Getenv("HISTFILE")
-}
-
-func GetGoPath() string {
-	return os.Getenv("GOPATH")
 }
 
 func GetStartFile() string {
