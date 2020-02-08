@@ -1,10 +1,10 @@
 package util
 
 type Command struct {
-	Raw      string
-	command  string
-	argument []string
-	pipe     *Command
+	Raw  string
+	Main string
+	Args []string
+	Pipe *Command
 }
 
 func parseCommand(command string) []string {
@@ -22,8 +22,8 @@ func NewCommand(command string) *Command {
 	cmd := Command{Raw: command}
 	split := parseCommand(command)
 	if len(split) > 0 {
-		cmd.command = split[0]
-		cmd.argument = split[1:]
+		cmd.Main = split[0]
+		cmd.Args = split[1:]
 	}
 	return &cmd
 }

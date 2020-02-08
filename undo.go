@@ -3,7 +3,9 @@ package main
 import (
 	"github.com/buttercrab/undo/util"
 	flag "github.com/integrii/flaggy"
+	"os/exec"
 	"runtime"
+	"strings"
 )
 
 func execute() {
@@ -16,6 +18,11 @@ func execute() {
 	uninstall := flag.NewSubcommand("uninstall")
 	uninstall.Description = "Uninstall undo command"
 
+	historyFile := ""
+	flag.String(&historyFile, "", "history", "set shell's history file (unset if value is 'default')")
+	startupFile := ""
+	flag.String(&startupFile, "s", "start-up", "set shell's start-up file (unset if value is 'default')")
+
 	flag.AttachSubcommand(install, 1)
 	flag.AttachSubcommand(uninstall, 1)
 	flag.Parse()
@@ -27,12 +34,26 @@ func execute() {
 	} else {
 		util.Warn("undo is under development")
 		util.Warn("It cannot undo all commands")
+
+		cmd := util.GetHistory(1)
+		if !util.Exist(cmd) {
+			util.Error(true, "Oops! Cannot undo")
+		}
+
+		output, err := exec.Command("undo-"+cmd.Main, "-m", `"`+cmd.Raw+`"`).Output()
+		if err != nil {
+			util.Error(true, err.Error())
+		}
+
+		for _, v := range strings.Split(string(output), "\n") {
+			util.Log(v)
+		}
 	}
 }
 
 func main() {
 	if runtime.GOOS == "windows" {
-		util.Error("Windows not supported")
+		util.Error(true, "Windows not supported")
 	} else {
 		execute()
 	}

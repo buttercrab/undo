@@ -15,26 +15,37 @@ var (
 	block = []string{" ", "\u258F", "\u258E", "\u258D", "\u258C", "\u258B", "\u258A", "\u2589"}
 )
 
-func Warn(s string) {
+func Warn(format string, a ...interface{}) {
+	s := fmt.Sprintf(format, a...)
 	prefix := color.YellowString("[WARN]")
 	fmt.Printf("%s %s\n", prefix, s)
 }
 
-func Error(s string) {
+func Error(finish bool, format string, a ...interface{}) {
+	s := fmt.Sprintf(format, a...)
 	prefix := color.RedString("[ERROR]")
 	fmt.Printf("%s %s\n", prefix, s)
-	Warn("Exiting program by error")
-	os.Exit(1)
+	if finish {
+		Warn("Exiting program by error")
+		os.Exit(1)
+	}
 }
 
 func Check(err error) {
 	if err != nil {
-		Error(err.Error())
+		Error(true, err.Error())
 	}
 }
 
-func Log(s string) {
+func Log(format string, a ...interface{}) {
+	s := fmt.Sprintf(format, a...)
 	prefix := color.CyanString("[LOG]")
+	fmt.Printf("%s %s\n", prefix, s)
+}
+
+func Info(format string, a ...interface{}) {
+	s := fmt.Sprintf(format, a...)
+	prefix := color.HiGreenString("[INFO]")
 	fmt.Printf("%s %s\n", prefix, s)
 }
 
@@ -56,6 +67,7 @@ func printBar(progress float32, width int) {
 
 func PrintProgress() chan<- float32 {
 	ch := make(chan float32, 1)
+	fmt.Println()
 	go printProgress(ch)
 	return ch
 }

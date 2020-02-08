@@ -12,7 +12,7 @@ func GetHistory(before int) *Command {
 	case "bash":
 		s = bashHistory(before)
 	default:
-		Error("We don't support " + shell + " yet.")
+		Error(true, "We don't support %s yet.", shell)
 	}
 
 	return NewCommand(s)
